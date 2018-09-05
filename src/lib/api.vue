@@ -12,7 +12,7 @@ export default {
       bindings: [],
       loading: false,
       socket: null,
-      url: 'wss://xoustaki.zxe.com.br',
+      url: 'wss://project-1.zxe.com.br/api',
       createSocket: function () {
         this.socket = null
         delete this.socket
