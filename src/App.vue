@@ -1,16 +1,23 @@
 <template>
-  <div id="app">
-    <router-view/>
-    <api ref='api' />
+  <div>
+    <Navigator />
+    <div id="app">
+      <router-view/>
+      <api ref='api' />
+    </div>
   </div>
 </template>
 
 <script>
 import api from '@/lib/api.vue'
+import Navigator from '@/components/Navigator'
 
 export default {
   name: 'App',
-  components: { api }
+  components: {
+    api,
+    Navigator
+  }
 }
 </script>
 
