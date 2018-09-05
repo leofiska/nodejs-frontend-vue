@@ -24,22 +24,10 @@ export default {
     }
   },
   created () {
-    fetch('http://167.114.23.86:7789/?token=' + localStorage.getItem('token'))
-      .then(response => {
-        if (response.ok) {
-          response.json().then(json => {
-            this.items = json.items
-            this.loading = false
-          })
-        } else {
-          this.loading = false
-        }
-      })
   },
   methods: {
     logout () {
-      localStorage.removeItem('token')
-      location.reload()
+      this.$parent.$refs.api.logout()
     }
   },
   computed: {

@@ -24,29 +24,8 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  created: function () {
-    this.checkLogin()
-  },
-  watch: {
-    '$route': 'checkLogin'
-  },
   router,
   store,
   template: '<App/>',
-  components: { App },
-  methods: {
-    checkLogin () {
-      if (!localStorage.getItem('token')) {
-        this.$router.push('login')
-        return
-      }
-      if (!this.$store.token && localStorage.getItem('token')) {
-        this.$router.push('user')
-        return
-      }
-      if (this.$store.token && localStorage.getItem('token')) {
-        this.$router.push('user')
-      }
-    }
-  }
+  components: { App }
 })

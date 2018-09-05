@@ -67,17 +67,26 @@ export default {
         var i = 0
         switch (obj.f) {
           case 'auth':
-            if (obj.error !== 0) {
+            if (obj.error !== false) {
               localStorage.removeItem('token')
-              this.$router.push('/home')
+              this.$router.push('/')
             }
             break
           case 'login':
             if (obj.auth === true) {
               localStorage.setItem('token', obj.content.token)
-              this.$router.push('/home')
+              this.$router.push('/')
             } else {
-              alert(obj.error)
+              console.log(obj)
+            }
+            break
+          case 'logout':
+            if (obj.error === false) {
+              localStorage.removeItem('token')
+              localStorage.removeItem('user')
+              this.$router.push('/login')
+            } else {
+              console.log(obj)
             }
             break
         }
@@ -106,9 +115,8 @@ export default {
       this.send({ f: 'login', id: id, pass: pass })
     },
     logout: function () {
+      if (localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) return false
       this.send({ f: 'logout', token: localStorage.getItem('token') })
-      localStorage.removeItem('token')
-      this.$router.push('/home')
     }
   }
 }

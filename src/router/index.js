@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Login from '@/components/Login'
 import User from '@/components/User'
 import Home from '@/components/Home'
-import ListUsers from '@/components/ListUsers'
+import Collaborators from '@/components/Collaborators'
 
 Vue.use(Router)
 
@@ -28,12 +28,15 @@ let router = new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
-      path: '/listusers',
-      name: 'listusers',
-      component: ListUsers,
+      path: '/collaborators',
+      name: 'collaborators',
+      component: Collaborators,
       meta: {
         requiresAuth: true
       }
@@ -43,7 +46,7 @@ let router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (localStorage.getItem('token') == null || localStorage.getItem('token') === undefined) {
+    if (localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) {
       next({
         path: '/login',
         params: { nextUrl: to.fullPath }
@@ -54,7 +57,7 @@ router.beforeEach((to, from, next) => {
         if (user.is_admin === 1) {
           next()
         } else {
-          next({name: 'userboard'})
+          next({name: 'home'})
         }
       } else {
         next()
@@ -64,7 +67,7 @@ router.beforeEach((to, from, next) => {
     if (localStorage.getItem('token') == null) {
       next()
     } else {
-      next({ name: 'userboard' })
+      next({ name: 'home' })
     }
   } else {
     next()
