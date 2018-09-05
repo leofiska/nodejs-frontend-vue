@@ -1,13 +1,14 @@
 <template>
   <div class="hello">
     <h1>{{ greeting }}</h1>
-    <Loading v-if="loading"></Loading>
-    <ul v-if="!loading">
-    <li v-for="item in items" :key="item.id">
+    <Loading v-if="items.loading"></Loading>
+    <ul v-if="!items.loading">
+    <li v-for="item in items.elements" :key="item.id">
       {{ item.name }} - {{ item.cpf }}
      </li>
     </ul>
     <button @click='logout'>Logout</button>
+    <button @click='update'>Update</button>
   </div>
 </template>
 
@@ -19,13 +20,16 @@ export default {
   components: {Loading},
   data () {
     return {
-      loading: true,
-      items: []
+      items: { tid: -1, loading: true, elements: [] }
     }
   },
-  created () {
+  mounted () {
+    this.update()
   },
   methods: {
+    update () {
+      this.$parent.$refs.api.fetch('collaboratorslist', this.items)
+    },
     logout () {
       this.$parent.$refs.api.logout()
     }

@@ -8,6 +8,8 @@ export default {
   name: 'api',
   data () {
     return {
+      ready: false,
+      bindings: [],
       loading: false,
       socket: null,
       url: 'wss://xoustaki.zxe.com.br',
@@ -17,17 +19,17 @@ export default {
         try {
           this.socket = new WebSocket(this.url)
         } catch (e) {
-          setTimeout(this.createSocket, 500)
+          setTimeout(this.createSocket.bind(this), 500)
           return
         }
         this.socket.onopen = () => {
           if (localStorage.getItem('token') !== null && localStorage.getItem('token') !== undefined) {
-            this.send({f: 'auth', token: localStorage.getItem('token')})
-            console.log(localStorage.getItem('token'))
+            this.send({f: 'auth', token: localStorage.getItem('token')}, true)
+          } else {
+            this.ready = true
           }
         }
         this.socket.onmessage = (e) => {
-          // if (this.socket.readyState !== this.socket.OPEN) return
           try {
             var obj = JSON.parse(e.data)
             this.executeServerMessage(obj)
@@ -41,7 +43,7 @@ export default {
               this.createSocket()
               break
             default:
-              setTimeout(this.createSocket, 300)
+              setTimeout(this.createSocket.bind(this), 300)
               break
           }
         }
@@ -52,24 +54,32 @@ export default {
           this.createSocket()
         }
       },
-      send: function (f) {
-        if (!this.socket || this.socket == null || this.socket === undefined || this.socket.send === undefined) {
-          setTimeout(this.send, 500, f)
-        } else {
+      send: function (f, forced) {
+        if (((forced !== undefined && forced === true) || this.ready === true) &&
+          this.socket &&
+          this.socket !== null &&
+          this.socket !== undefined &&
+          this.socket.send !== undefined &&
+          this.socket.readyState === this.socket.OPEN) {
           try {
             this.socket.send(JSON.stringify(f))
           } catch (e) {
-            setTimeout(this.send, 500, f)
+            console.log('exception while sending message to backend')
           }
+        } else {
+          // socket is not ready to send messages, reschedule
+          // console.log('socket not ready, rescheduling')
+          setTimeout(this.send.bind(this), 50, f)
         }
       },
       executeServerMessage: (obj) => {
-        var i = 0
         switch (obj.f) {
           case 'auth':
             if (obj.error !== false) {
               localStorage.removeItem('token')
               this.$router.push('/')
+            } else {
+              this.ready = true
             }
             break
           case 'login':
@@ -89,19 +99,16 @@ export default {
               console.log(obj)
             }
             break
-        }
-        if (obj.alert !== undefined) {
-          for (i = 0; obj.alert[i] !== undefined; i++) {
-            setAlert(obj.alert[i])
-          }
-        }
-        if (obj.badge !== undefined) {
-          for (i = 0; obj.badge[i] !== undefined; i++) {
-            setBadge(obj.badge[i])
-          }
-        }
-        if (obj.reload !== undefined) {
-          setTimeout(location.reload(false), obj.reload)
+          case 'fetch':
+            if (obj.error === false) {
+              if (this.bindings[obj.tid - 1] !== undefined && this.bindings[obj.tid - 1] !== null) {
+                this.bindings[obj.tid - 1].elements = obj.content.items
+                this.bindings[obj.tid - 1].loading = false
+              }
+            } else {
+              console.log(obj)
+            }
+            break
         }
       }
     }
@@ -117,24 +124,14 @@ export default {
     logout: function () {
       if (localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) return false
       this.send({ f: 'logout', token: localStorage.getItem('token') })
+    },
+    fetch: function (method, obj) {
+      obj.loading = true
+      if (obj.tid < 0) {
+        obj.tid = this.bindings.push(obj)
+      }
+      this.send({ f: method, tid: obj.tid })
     }
   }
-}
-
-function setAlert (al) {
-  console.log('alerta')
-  console.log(this)
-  this.$router.push('/home')
-  // var message = '<div class="alert alert-dismissible alert-' + al.type + '"><button type="button" class="close" data-dismiss="alert">&times;</button>' + al.message + '</div>'
-  // $('div#' + al.id).html(message)
-}
-function setBadge (a) {
-  // var message = '<span class="badge badge-'+al.type + '">'+al.message + '</div>'
-  // $('div#' + al.id).dequeue();
-  // $('div#' + al.id).css('opacity',0).animate({'opacity': 1}, 200)
-  // $('div#' + al.id).html(message)
-  // if ( al.timeout !== undefined ) {
-  // $('div#' + al.id).delay(al.timeout).css('opacity', 1).animate({'opacity': 0}, 200)
-  // }
 }
 </script>
