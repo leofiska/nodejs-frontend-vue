@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     update () {
-      this.$emit('fetch', 'collaboratorslist', this.items)
+      this.$emit('fetch', 'collaborators', { f: 'list' }, this.items)
       // this.$parent.$refs.api.fetch('collaboratorslist', this.items)
     }
   },

@@ -25,8 +25,8 @@ export default {
     Navigator
   },
   methods: {
-    fetch (method, item) {
-      this.$refs.api.fetch(method, item)
+    fetch (method, options, item) {
+      this.$refs.api.fetch(method, options, item)
     }
   }
 }

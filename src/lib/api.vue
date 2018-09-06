@@ -39,14 +39,7 @@ export default {
         }
         this.socket.onclose = (e) => {
           console.log('connection closed: ' + e.code)
-          switch (e.code) {
-            case 1006:
-              this.createSocket()
-              break
-            default:
-              setTimeout(this.createSocket.bind(this), 300)
-              break
-          }
+          setTimeout(this.createSocket.bind(this), 300)
         }
         this.socket.onerror = (e) => {
           console.log('error')
@@ -129,12 +122,12 @@ export default {
       if (localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) return false
       this.send({ f: 'logout', token: localStorage.getItem('token') })
     },
-    fetch: function (method, obj) {
+    fetch: function (method, options, obj) {
       obj.loading = true
       if (obj.tid < 0) {
         obj.tid = this.bindings.push(obj)
       }
-      this.send({ f: method, tid: obj.tid })
+      this.send({ f: method, options: options, tid: obj.tid })
     }
   }
 }
