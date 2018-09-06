@@ -1,5 +1,5 @@
 {
-  "name": "vue-test",
+  "name": "nodejs-frontend-vue",
   "version": "1.0.0",
   "description": "A Vue.js project",
   "author": "Leonardo Fischer <leonardo@fischers.it>",
@@ -11,6 +11,9 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "bootstrap": "^4.1.0",
+    "bootstrap-vue": "^2.0.0-rc.7",
+    "jquery": "^3.3.1",
     "node": "^10.9.0",
     "npm": "^6.4.1",
     "vue": "^2.5.2",

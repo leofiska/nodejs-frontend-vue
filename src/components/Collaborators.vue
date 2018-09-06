@@ -7,7 +7,6 @@
       {{ item.name }} - {{ item.cpf }}
      </li>
     </ul>
-    <button @click='logout'>Logout</button>
     <button @click='update'>Update</button>
   </div>
 </template>
@@ -28,15 +27,14 @@ export default {
   },
   methods: {
     update () {
-      this.$parent.$refs.api.fetch('collaboratorslist', this.items)
-    },
-    logout () {
-      this.$parent.$refs.api.logout()
+      this.$emit('fetch', 'collaboratorslist', this.items)
+      // this.$parent.$refs.api.fetch('collaboratorslist', this.items)
     }
   },
   computed: {
     greeting  () {
-      return 'Welcome ' + localStorage.getItem('id')
+      var str = 'List'
+      return str
     }
   }
 }

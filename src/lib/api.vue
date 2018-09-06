@@ -6,6 +6,7 @@
 <script>
 export default {
   name: 'api',
+  props: [ 'token' ],
   data () {
     return {
       ready: false,
@@ -80,11 +81,13 @@ export default {
               this.$router.push('/')
             } else {
               this.ready = true
+              this.$emit('setToken', localStorage.getItem('token'))
             }
             break
           case 'login':
             if (obj.auth === true) {
               localStorage.setItem('token', obj.content.token)
+              this.$emit('setToken', localStorage.getItem('token'))
               this.$router.push('/')
             } else {
               console.log(obj)
@@ -93,8 +96,9 @@ export default {
           case 'logout':
             if (obj.error === false) {
               localStorage.removeItem('token')
-              localStorage.removeItem('user')
-              this.$router.push('/login')
+              localStorage.removeItem('id')
+              this.$emit('setToken', null)
+              this.$router.push('/')
             } else {
               console.log(obj)
             }

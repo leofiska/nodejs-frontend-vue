@@ -1,22 +1,13 @@
 <template>
   <div class="hello">
     <h1>{{ greeting }}</h1>
-    <Loading v-if="loading"></Loading>
-    <ul v-if="!loading">
-    <li v-for="item in items" :key="item.id">
-      {{ item.name }} - {{ item.cpf }}
-     </li>
-    </ul>
-    <button @click='logout'>Logout</button>
   </div>
 </template>
 
 <script>
-import Loading from './Loading.vue'
 
 export default {
   name: 'user',
-  components: {Loading},
   data () {
     return {
       loading: true,
@@ -24,7 +15,6 @@ export default {
     }
   },
   created () {
-    this.$router.push('/collaborators')
   },
   methods: {
     logout () {
@@ -33,7 +23,11 @@ export default {
   },
   computed: {
     greeting  () {
-      return 'Welcome ' + localStorage.getItem('id')
+      var str = 'Welcome'
+      if (localStorage.getItem('id') !== null) {
+        str += ' ' + localStorage.getItem('id')
+      }
+      return str
     }
   }
 }

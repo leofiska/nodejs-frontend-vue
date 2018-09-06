@@ -1,9 +1,9 @@
 <template>
   <div>
-    <Navigator />
+    <api ref='api' :token="token" @setToken="token = $event" />
+    <Navigator :token="token" @setToken="token = $event" />
     <div id="app">
-      <router-view/>
-      <api ref='api' />
+      <router-view @fetch="fetch"/>
     </div>
   </div>
 </template>
@@ -14,9 +14,19 @@ import Navigator from '@/components/Navigator'
 
 export default {
   name: 'App',
+  data () {
+    return {
+      token: localStorage.getItem('token')
+    }
+  },
   components: {
     api,
     Navigator
+  },
+  methods: {
+    fetch (method, item) {
+      this.$refs.api.fetch(method, item)
+    }
   }
 }
 </script>
