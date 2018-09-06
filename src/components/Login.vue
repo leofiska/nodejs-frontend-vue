@@ -3,7 +3,7 @@
     <h2>Provide your credentials</h2>
     <form action="/post" v-if="!loading">
       <label><b>Username</b></label>
-      <input type="text" v-model="username"><br />
+      <input ref='username' type="text" v-model="username"><br />
       <label><b>Password</b></label>
       <input type="password" v-model="password"><br /><br />
       <input class='btn btn-dark' type="submit" v-on:click.prevent="login" value='login'>
@@ -32,6 +32,9 @@ export default {
     login: function () {
       this.$parent.$refs.api.login(this.username, this.password)
     }
+  },
+  mounted () {
+    this.$refs.username.focus()
   }
 }
 </script>
