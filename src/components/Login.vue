@@ -6,7 +6,7 @@
       <input type="text" v-model="username"><br />
       <label><b>Password</b></label>
       <input type="password" v-model="password"><br /><br />
-      <input type="submit" v-on:click.prevent="login" value='login'>
+      <input class='btn btn-dark' type="submit" v-on:click.prevent="login" value='login'>
     </form>
     <Loading v-if="loading"></Loading>
      {{ result }}

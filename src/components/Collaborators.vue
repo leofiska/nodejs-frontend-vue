@@ -7,7 +7,7 @@
       {{ item.name }} - {{ item.cpf }}
      </li>
     </ul>
-    <button @click='update'>Update</button>
+    <button class='btn btn-dark' @click='update'>Update</button>
   </div>
 </template>
 
@@ -22,8 +22,12 @@ export default {
       items: { tid: -1, loading: true, elements: [] }
     }
   },
-  mounted () {
+  props: [ 'title' ],
+  beforeMount () {
     this.update()
+  },
+  mounted () {
+    document.title = 'collaborators | ' + this.title
   },
   methods: {
     update () {

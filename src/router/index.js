@@ -44,12 +44,12 @@ let router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.path === '/') {
     next({
+      name: 'home',
       path: '/home',
       params: { nextUrl: to.fullPath }
     })
     return
   }
-
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) {
       next({

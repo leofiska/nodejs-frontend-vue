@@ -3,7 +3,7 @@
     <api ref='api' :token="token" @setToken="token = $event" />
     <Navigator :token="token" @setToken="token = $event" />
     <div id="app">
-      <router-view @fetch="fetch"/>
+      <router-view @fetch="fetch" :title="title" />
     </div>
   </div>
 </template>
@@ -16,7 +16,8 @@ export default {
   name: 'App',
   data () {
     return {
-      token: localStorage.getItem('token')
+      token: localStorage.getItem('token'),
+      title: 'NFV'
     }
   },
   components: {

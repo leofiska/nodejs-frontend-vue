@@ -14,7 +14,9 @@ export default {
       items: []
     }
   },
-  created () {
+  props: [ 'title' ],
+  mounted () {
+    document.title = 'home | ' + this.title
   },
   methods: {
     logout () {
