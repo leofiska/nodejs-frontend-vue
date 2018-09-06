@@ -66,7 +66,7 @@ export default {
           setTimeout(this.send.bind(this), 50, f)
         }
       },
-      executeServerMessage: (obj) => {
+      executeServerMessage: function (obj) {
         switch (obj.f) {
           case 'auth':
             if (obj.error !== false) {
@@ -99,8 +99,7 @@ export default {
           case 'fetch':
             if (obj.error === false) {
               if (this.bindings[obj.tid - 1] !== undefined && this.bindings[obj.tid - 1] !== null) {
-                this.bindings[obj.tid - 1].elements = obj.content.items
-                this.bindings[obj.tid - 1].loading = false
+                this.bindings[obj.tid - 1].f(obj).bind(this.bindings[obj.tid - 1].context)
               }
             } else {
               console.log(obj)
@@ -122,12 +121,11 @@ export default {
       if (localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) return false
       this.send({ f: 'logout', token: localStorage.getItem('token') })
     },
-    fetch: function (method, options, obj) {
-      obj.loading = true
-      if (obj.tid < 0) {
-        obj.tid = this.bindings.push(obj)
+    fetch: function (method, options, el) {
+      if (el.obj.tid < 0) {
+        el.obj.tid = this.bindings.push(el)
       }
-      this.send({ f: method, options: options, tid: obj.tid })
+      this.send({ f: method, options: options, tid: el.obj.tid })
     }
   }
 }
