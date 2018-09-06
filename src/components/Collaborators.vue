@@ -8,6 +8,7 @@
      </li>
     </ul>
     <button class='btn btn-dark' @click='update'>Update</button>
+    <button class='btn btn-dark' @click='add'>Add</button>
   </div>
 </template>
 
@@ -24,7 +25,10 @@ export default {
   },
   props: [ 'title' ],
   beforeMount () {
-    this.update()
+    this.$emit('fetch', 'collaborators', { f: 'subscribe' }, this.items)
+  },
+  beforeDestroy () {
+    this.$emit('fetch', 'collaborators', { f: 'unsubscribe' }, this.items)
   },
   mounted () {
     document.title = 'collaborators | ' + this.title
@@ -32,6 +36,10 @@ export default {
   methods: {
     update () {
       this.$emit('fetch', 'collaborators', { f: 'list' }, this.items)
+      // this.$parent.$refs.api.fetch('collaboratorslist', this.items)
+    },
+    add () {
+      this.$emit('fetch', 'collaborators', { f: 'add' }, this.items)
       // this.$parent.$refs.api.fetch('collaboratorslist', this.items)
     }
   },
