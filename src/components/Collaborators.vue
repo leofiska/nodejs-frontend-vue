@@ -1,17 +1,27 @@
 <template>
   <div class="hello">
-    <h1>{{ greeting }}</h1>
-      <div v-if="!adding">
+    <div v-if="!adding" class='d-inline-block'>
+      <h2>{{s.title}}</h2>
       <Loading v-if="items.loading"></Loading>
-      <ul v-if="!items.loading">
-      <li v-for="item in items.elements" :key="item.id">
-        {{ item.name }} - {{ item.cpf }}
-       </li>
-      </ul>
+      <table v-if="!items.loading" style='min-width: 50vw;' class="text-left table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th class='pl-3 pr-5'>{{s.name}}</th>
+            <th class='pl-3 pr-5'>{{s.cpf}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in items.elements" :key="item.id">
+            <td class='pl-3 pr-5'>{{ item.name }}</td>
+            <td class='pl-3 pr-5'>{{ item.cpf }}</td>
+          </tr>
+        </tbody>
+      </table>
       <button class='btn btn-dark' @click='refresh'>{{s.refresh}}</button>
       <button class='btn btn-dark' @click='show_add'>{{s.add}}</button>
     </div>
     <div v-else>
+      <h2>{{s.addtitle}}</h2>
       <form v-if="!this.loading" action="/api">
         <input ref="sname" type="text" v-model="name" :placeholder="s.name"><br />
         <input type="text" v-model="cpf" :placeholder="s.cpf"><br /><br />
@@ -37,10 +47,12 @@ export default {
       cpf: '',
       s: {
         add: 'add',
+        addtitle: 'Add New Collaborator',
         cancel: 'cancel',
         cpf: 'cpf',
         name: 'name',
-        refresh: 'refresh'
+        refresh: 'refresh',
+        title: 'List of Collaborators'
       },
       items: { tid: -1, loading: true, elements: [] }
     }
