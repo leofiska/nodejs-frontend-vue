@@ -11,6 +11,7 @@ export default {
     return {
       ready: false,
       bindings: [],
+      subscriptions: [],
       loading: false,
       socket: null,
       url: 'wss://project-1.zxe.com.br/api',
@@ -29,6 +30,9 @@ export default {
           } else {
             this.ready = true
           }
+          for (var i = 0; i < this.subscriptions.length; i++) {
+            this.subscribe(this.bindings[i].method, { f: 'subscribe' }, this.bindings[i])
+          }
         }
         this.socket.onmessage = (e) => {
           try {
@@ -38,14 +42,16 @@ export default {
           }
         }
         this.socket.onclose = (e) => {
+          this.ready = false
           console.log('connection closed: ' + e.code)
           setTimeout(this.createSocket.bind(this), 300)
         }
         this.socket.onerror = (e) => {
+          this.ready = false
           console.log('error')
           this.socket.onclose = function () {}
           this.socket.close()
-          this.createSocket()
+          setTimeout(this.createSocket.bind(this), 300)
         }
       },
       send: function (f, forced) {
@@ -125,6 +131,18 @@ export default {
       if (el.obj.tid < 0) {
         el.obj.tid = this.bindings.push(el)
       }
+      this.send({ f: method, options: options, tid: el.obj.tid })
+    },
+    subscribe: function (method, options, el) {
+      if (el.obj.tid < 0) {
+        el.obj.tid = this.bindings.push(el)
+        this.subscriptions.push(el.obj.tid)
+      }
+      this.send({ f: method, options: options, tid: el.obj.tid })
+    },
+    unsubscribe: function (method, options, el) {
+      this.bindings.splice(el.obj.tid, 1)
+      this.subscriptions.splice(this.bindings.indexOf(el.obj.tid))
       this.send({ f: method, options: options, tid: el.obj.tid })
     }
   }

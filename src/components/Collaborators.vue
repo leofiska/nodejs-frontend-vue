@@ -59,10 +59,10 @@ export default {
   },
   props: [ 'title' ],
   beforeMount () {
-    this.$emit('fetch', 'collaborators', { f: 'subscribe' }, { f: this.storno, context: this, obj: this.items })
+    this.$emit('subscribe', 'collaborators', { f: 'subscribe' }, { method: 'collaborators', f: this.storno, context: this, obj: this.items })
   },
   beforeDestroy () {
-    this.$emit('fetch', 'collaborators', { f: 'unsubscribe' }, { f: this.storno, context: this, obj: this.items })
+    this.$emit('unsubscribe', 'collaborators', { f: 'unsubscribe' }, { method: 'collaborators', f: this.storno, context: this, obj: this.items })
   },
   mounted () {
     document.title = 'collaborators | ' + this.title
@@ -70,12 +70,12 @@ export default {
   methods: {
     refresh () {
       this.items.loading = true
-      this.$emit('fetch', 'collaborators', { f: 'list' }, { f: this.storno, context: this, obj: this.items })
+      this.$emit('fetch', 'collaborators', { f: 'list' }, { method: 'collaborators', f: this.storno, context: this, obj: this.items })
     },
     add () {
       this.items.loading = true
       this.loading = true
-      this.$emit('fetch', 'collaborators', { f: 'add', name: this.name, cpf: this.cpf }, { f: this.storno, context: this, obj: this.items })
+      this.$emit('fetch', 'collaborators', { f: 'add', name: this.name, cpf: this.cpf }, { method: 'collaborators', f: this.storno, context: this, obj: this.items })
     },
     show_add () {
       this.adding = true

@@ -3,7 +3,7 @@
     <api ref='api' :token="token" @setToken="token = $event" />
     <Navigator :token="token" @setToken="token = $event" />
     <div id="app">
-      <router-view @fetch="fetch" :title="title" />
+      <router-view @fetch="fetch" @subscribe="subscribe" @unsubscribe="unsubscribe" :title="title" />
     </div>
   </div>
 </template>
@@ -27,6 +27,12 @@ export default {
   methods: {
     fetch (method, options, item) {
       this.$refs.api.fetch(method, options, item)
+    },
+    subscribe (method, options, item) {
+      this.$refs.api.subscribe(method, options, item)
+    },
+    unsubscribe (method, options, item) {
+      this.$refs.api.unsubscribe(method, options, item)
     }
   }
 }
