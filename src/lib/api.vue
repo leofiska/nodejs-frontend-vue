@@ -17,8 +17,8 @@ export default {
       socket: null,
       url: 'wss://project-1.zxe.com.br/api',
       createSocket: function () {
-        this.socket = null
         delete this.socket
+        this.socket = null
         try {
           this.socket = new WebSocket(this.url)
         } catch (e) {
