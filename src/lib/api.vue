@@ -135,6 +135,10 @@ export default {
       this.send({ f: method, options: options, tid: el.obj.tid })
     },
     subscribe: function (method, options, el) {
+      if (!this.online) {
+        setTimeout(this.subscribe.bind(this), 100, method, options, el)
+        return
+      }
       if (el.obj.tid < 0) {
         el.obj.tid = this.bindings.push(el)
         this.subscriptions.push(el.obj.tid)

@@ -1,5 +1,3 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
 import Footer from './Footer'
@@ -9,29 +7,38 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import router from './router'
 import Vuex from 'vuex'
 import api from '@/lib/api'
+import feapi from '@/lib/feapi'
 
 Vue.use(Vuex)
-Vue.use(api)
+Vue.use(feapi)
 Vue.use(BootstrapVue)
 Vue.component('v-api', api)
 Vue.config.productionTip = false
 
 const store = new Vuex.Store({
   state: {
-    token: ''
+    ws: null,
+    online: false
   },
   mutations: {
-    token (state, name) {
-      state.token = name
+    ws (state, ws) {
+      state.ws = ws
+    },
+    online (state, online) {
+      state.online = online
     }
   },
   actions: {
-    update_token (store, name) {
-      store.commit('token', name)
+    update_ws (store, ws) {
+      ws.createSocket()
+      store.commit('ws', ws)
+    },
+    set_online (store, online) {
+      store.commit('online', online)
     }
   }
 })
-Vue.config.productionTip = false
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
