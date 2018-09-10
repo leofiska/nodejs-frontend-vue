@@ -1,15 +1,14 @@
 <template>
   <div>
-    <api ref='api' :token="token" @setToken="token = $event" />
-    <Navigator :token="token" @setToken="token = $event" />
+    <v-api ref='api' :token="token" @setToken="token = $event" :online="online" @setOnline="online = $event" />
+    <Navigator :token="token" @setToken="token = $event" @logout="logout" :online="online" />
     <div id="app">
-      <router-view @fetch="fetch" @subscribe="subscribe" @unsubscribe="unsubscribe" :title="title" />
+      <router-view @fetch="fetch" @subscribe="subscribe" @unsubscribe="unsubscribe" :title="title" :online="online" />
     </div>
   </div>
 </template>
 
 <script>
-import api from '@/lib/api.vue'
 import Navigator from '@/components/Navigator'
 
 export default {
@@ -17,11 +16,13 @@ export default {
   data () {
     return {
       token: localStorage.getItem('token'),
+      online: false,
       title: 'NFV'
     }
   },
+  created () {
+  },
   components: {
-    api,
     Navigator
   },
   methods: {
@@ -33,6 +34,9 @@ export default {
     },
     unsubscribe (method, options, item) {
       this.$refs.api.unsubscribe(method, options, item)
+    },
+    logout () {
+      this.$refs.api.logout()
     }
   }
 }
@@ -40,11 +44,12 @@ export default {
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  min-height: 100vh;
 }
 </style>

@@ -1,17 +1,28 @@
 <template>
-  <header id='navigator'>
-    <b-navbar toggleable="md" type="dark" variant="dark">
-      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-      <b-navbar-brand to="/">NFV</b-navbar-brand>
-      <b-collapse is-nav id="nav_collapse">
-        <b-navbar-nav>
-          <b-nav-item :to="item.link" v-for="item in items" :key="item.link">{{item.name}}</b-nav-item>
-          <b-nav-item to="/login" v-if="!token">Login</b-nav-item>
-          <b-nav-item @click.prevent="logout" v-else>Logout</b-nav-item>
-        </b-navbar-nav>
-      </b-collapse>
-    </b-navbar>
-  </header>
+  <b-navbar toggleable="md" type="dark" variant="dark" :sticky="true">
+    <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+    <b-navbar-brand to="/">NFV</b-navbar-brand>
+    <b-collapse is-nav id="nav_collapse">
+      <b-navbar-nav>
+        <b-nav-item :to="item.link" v-for="item in items" :key="item.link" :disabled="!online">{{item.name}}</b-nav-item>
+      </b-navbar-nav>
+      <b-navbar-nav class="ml-auto">
+        <b-nav-form>
+          <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search" :disabled="!online"/>
+          <b-button size="sm" class="my-2 my-sm-0" type="submit" :disabled="!online">Search</b-button>
+        </b-nav-form>
+        <b-nav-item-dropdown text="Lang" right>
+          <b-dropdown-item href="#">English (International)</b-dropdown-item>
+          <b-dropdown-item href="#">Portuguese (Brazil)</b-dropdown-item>
+        </b-nav-item-dropdown>
+        <b-nav-item-dropdown right :disabled="!online" text="Account">
+          <b-dropdown-item to="/login" v-if="!token" :disabled="!online">Sign-In</b-dropdown-item>
+          <b-dropdown-item to="/profile" v-if="token" :disabled="!online">Profile</b-dropdown-item>
+          <b-dropdown-item @click.prevent="logout" v-if="token" :disabled="!online">Sign-Out</b-dropdown-item>
+        </b-nav-item-dropdown>
+      </b-navbar-nav>
+    </b-collapse>
+  </b-navbar>
 </template>
 
 <script>
@@ -27,13 +38,16 @@ export default {
       ]
     }
   },
-  props: [ 'token' ],
+  props: [
+    'token',
+    'online'
+  ],
   created: function () {
     // this.$emit('setToken', 'lepo')
   },
   methods: {
     logout: function () {
-      this.$parent.$refs.api.logout()
+      this.$emit('logout')
     }
   }
 }

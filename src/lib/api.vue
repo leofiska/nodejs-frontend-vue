@@ -1,15 +1,16 @@
-<template>
-  <div>
-  </div>
-</template>
-
 <script>
 export default {
   name: 'api',
-  props: [ 'token' ],
+  props: [
+    'token',
+    'online'
+  ],
+  render () {
+    return {
+    }
+  },
   data () {
     return {
-      ready: false,
       bindings: [],
       subscriptions: [],
       loading: false,
@@ -25,10 +26,10 @@ export default {
           return
         }
         this.socket.onopen = () => {
-          if (localStorage.getItem('token') !== null && localStorage.getItem('token') !== undefined) {
-            this.send({f: 'auth', token: localStorage.getItem('token')}, true)
+          if (this.token !== null && this.token !== undefined) {
+            this.send({f: 'auth', token: this.token}, true)
           } else {
-            this.ready = true
+            this.$emit('setOnline', true)
           }
           for (var i = 0; i < this.subscriptions.length; i++) {
             this.subscribe(this.bindings[i].method, { f: 'subscribe' }, this.bindings[i])
@@ -42,12 +43,12 @@ export default {
           }
         }
         this.socket.onclose = (e) => {
-          this.ready = false
+          this.$emit('setOnline', false)
           console.log('connection closed: ' + e.code)
           setTimeout(this.createSocket.bind(this), 300)
         }
         this.socket.onerror = (e) => {
-          this.ready = false
+          this.$emit('setOnline', false)
           console.log('error')
           this.socket.onclose = function () {}
           this.socket.close()
@@ -55,7 +56,7 @@ export default {
         }
       },
       send: function (f, forced) {
-        if (((forced !== undefined && forced === true) || this.ready === true) &&
+        if (((forced !== undefined && forced === true) || this.online === true) &&
           this.socket &&
           this.socket !== null &&
           this.socket !== undefined &&
@@ -79,7 +80,7 @@ export default {
               localStorage.removeItem('token')
               this.$router.push('/')
             } else {
-              this.ready = true
+              this.$emit('setOnline', true)
               this.$emit('setToken', localStorage.getItem('token'))
             }
             break
