@@ -17,7 +17,7 @@ export default {
   name: 'App',
   data () {
     return {
-      token: JSON.parse(localStorage.getItem('token')),
+      token: localStorage.getItem('token'),
       online: false,
       title: 'NFV'
     }
