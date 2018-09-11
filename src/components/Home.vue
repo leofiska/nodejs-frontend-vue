@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ greeting }}</h1>
+    {{token}}
   </div>
 </template>
 
@@ -14,7 +15,10 @@ export default {
       items: []
     }
   },
-  props: [ 'title' ],
+  props: [
+    'title',
+    'token'
+  ],
   mounted () {
     document.title = 'home | ' + this.title
   },

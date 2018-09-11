@@ -14,7 +14,7 @@ let router = new Router({
       name: 'login',
       component: Login,
       meta: {
-        guest: true
+        guestOnly: true
       }
     },
     {
@@ -68,7 +68,7 @@ router.beforeEach((to, from, next) => {
         next()
       }
     }
-  } else if (to.matched.some(record => record.meta.guest)) {
+  } else if (to.matched.some(record => record.meta.guestOnly)) {
     if (localStorage.getItem('token') == null) {
       next()
     } else {

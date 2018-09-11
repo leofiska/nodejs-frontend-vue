@@ -2,11 +2,9 @@
   <div>
     <h2>Provide your credentials</h2>
     <form action="/post" v-if="!loading">
-      <label><b>Username</b></label>
-      <input ref='username' type="text" v-model="username"><br />
-      <label><b>Password</b></label>
-      <input type="password" v-model="password"><br /><br />
-      <input class='btn btn-dark' type="submit" v-on:click.prevent="login" value='login'>
+      <input ref='username' type="text" v-model="username" :placeholder="s.username"><br />
+      <input type="password" v-model="password" :placeholder="s.password"><br /><br />
+      <input class='btn btn-dark' type="submit" v-on:click.prevent="login" value='login' >
     </form>
     <Loading v-if="loading"></Loading>
      {{ result }}
@@ -22,6 +20,10 @@ export default {
   },
   data () {
     return {
+      s: {
+        username: 'Username',
+        password: 'Password'
+      },
       loading: false,
       username: '',
       password: '',
@@ -39,18 +41,8 @@ export default {
 }
 </script>
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+input[type="text"],input[type="password"] {
+  padding: 2px 5px;
+  margin: 5px 0px !important;
 }
 </style>

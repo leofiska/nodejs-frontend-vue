@@ -4,7 +4,7 @@
     <b-navbar-brand to="/">NFV</b-navbar-brand>
     <b-collapse is-nav id="nav_collapse">
       <b-navbar-nav>
-        <b-nav-item :to="item.link" v-for="item in items" :key="item.link" :disabled="!online">{{item.name}}</b-nav-item>
+        <b-nav-item :to="item.path" v-for="item in items.elements" :key="item.path" :disabled="!online" v-if="( item.meta.alwaysVisible || (item.meta.requireAuth && account !== null) || (!item.meta.requireAuth && (account === null && item.meta.guestOnly || !item.meta.guestOnly)) )">{{item.name}}</b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-form>
@@ -31,11 +31,29 @@ export default {
   name: 'navigator',
   data () {
     return {
-      activeUser: (localStorage.getItem('token') !== undefined && localStorage.getItem('token') !== null),
-      items: [
-        { name: 'Home', link: '/home', requireAuth: false },
-        { name: 'Collaborators', link: '/collaborators', requireAuth: true }
-      ]
+      items: {
+        tid: -1,
+        loading: true,
+        elements: [
+          {
+            name: 'Home',
+            path: '/home',
+            meta: {
+              alwaysVisible: true,
+              requireAuth: false,
+              guestOnly: false
+            }
+          },
+          {
+            name: 'Collaborators',
+            path: '/collaborators',
+            meta: {
+              alwaysVisible: false,
+              requireAuth: true
+            }
+          }
+        ]
+      }
     }
   },
   props: [
@@ -43,7 +61,7 @@ export default {
     'online'
   ],
   created: function () {
-    // this.$emit('setToken', 'lepo')
+    // this.$emit('settoken', 'lepo')
   },
   methods: {
     logout: function () {

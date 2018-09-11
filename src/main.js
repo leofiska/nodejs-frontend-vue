@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import App from './App'
-import Footer from './Footer'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -18,10 +17,4 @@ new Vue({
   api,
   template: '<App/>',
   components: { App }
-})
-new Vue({
-  el: '#footer',
-  router,
-  template: '<Footer/>',
-  components: { Footer }
 })

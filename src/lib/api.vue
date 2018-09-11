@@ -77,17 +77,17 @@ export default {
         switch (obj.f) {
           case 'auth':
             if (obj.error !== false) {
+              localStorage.removeItem('account')
               localStorage.removeItem('token')
               this.$router.push('/')
-            } else {
-              this.$emit('setOnline', true)
-              this.$emit('setToken', localStorage.getItem('token'))
             }
+            this.$emit('setOnline', true)
             break
           case 'login':
             if (obj.auth === true) {
               localStorage.setItem('token', obj.content.token)
-              this.$emit('setToken', localStorage.getItem('token'))
+              localStorage.setItem('account', JSON.stringify(obj.content.user))
+              this.$emit('settoken', obj.content.token)
               this.$router.push('/')
             } else {
               console.log(obj)
@@ -95,9 +95,9 @@ export default {
             break
           case 'logout':
             if (obj.error === false) {
+              localStorage.removeItem('account')
               localStorage.removeItem('token')
-              localStorage.removeItem('id')
-              this.$emit('setToken', null)
+              this.$emit('settoken', null)
               this.$router.push('/')
             } else {
               console.log(obj)
