@@ -2,8 +2,7 @@
   <div class="hello">
     <div v-if="!adding" class='d-inline-block'>
       <h2>{{s.title}}</h2>
-      <Loading v-if="items.loading"></Loading>
-      <table v-if="!items.loading" style='min-width: 50vw;' class="text-left table table-striped table-bordered">
+      <table style='min-width: 50vw;' class="text-left table table-striped table-bordered">
         <thead>
           <tr>
             <th class='pl-3 pr-5'>{{s.name}}</th>
@@ -17,6 +16,7 @@
           </tr>
         </tbody>
       </table>
+      <Loading :loading="this.items.loading"></Loading>
       <button class='btn btn-dark' @click='refresh'>{{s.refresh}}</button>
       <button class='btn btn-dark' @click='show_add'>{{s.add}}</button>
     </div>

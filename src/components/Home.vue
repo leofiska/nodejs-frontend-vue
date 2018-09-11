@@ -1,7 +1,6 @@
 <template>
   <div class="hello">
     <h1>{{ greeting }}</h1>
-    {{token}}
   </div>
 </template>
 

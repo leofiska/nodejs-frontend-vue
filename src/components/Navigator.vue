@@ -4,7 +4,7 @@
     <b-navbar-brand to="/">NFV</b-navbar-brand>
     <b-collapse is-nav id="nav_collapse">
       <b-navbar-nav>
-        <b-nav-item :to="item.path" v-for="item in items.elements" :key="item.path" :disabled="!online" v-if="( item.meta.alwaysVisible || (item.meta.requireAuth && account !== null) || (!item.meta.requireAuth && (account === null && item.meta.guestOnly || !item.meta.guestOnly)) )">{{item.name}}</b-nav-item>
+        <b-nav-item :to="item.path" v-for="item in items.elements" :key="item.path" :disabled="!online" v-if="( item.meta.alwaysVisible || (item.meta.requireAuth && token !== null) || (!item.meta.requireAuth && (token === null && item.meta.guestOnly || !item.meta.guestOnly)) )">{{item.name}}</b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-form>
