@@ -19,9 +19,6 @@ export default {
     document.title = 'home | ' + this.title
   },
   methods: {
-    logout () {
-      this.$parent.$refs.api.logout()
-    }
   },
   computed: {
     greeting  () {

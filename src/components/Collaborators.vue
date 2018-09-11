@@ -70,7 +70,6 @@ export default {
   methods: {
     refresh () {
       this.items.loading = true
-      console.log('online: ' + this.$store.state.online)
       this.$emit('fetch', 'collaborators', { f: 'list' }, { method: 'collaborators', f: this.storno, context: this, obj: this.items })
     },
     add () {

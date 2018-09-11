@@ -1,7 +1,10 @@
-<script>
+import Vue from 'vue'
+
+console.log('opa5')
+
 const app = function (store) {
   return {
-    store: store,
+    online: false,
     bindings: [],
     subscriptions: [],
     loading: false,
@@ -20,7 +23,7 @@ const app = function (store) {
           console.log('sending auth: ' + localStorage.getItem('token'))
           this.send({f: 'auth', token: localStorage.getItem('token')}, true)
         } else {
-          this.store.$store.dispatch('set_online', true)
+          this.online = true
         }
       }
       this.socket.onmessage = (e) => {
@@ -32,13 +35,13 @@ const app = function (store) {
       }
       this.socket.onclose = (e) => {
         if (this.$store !== undefined) {
-          this.store.$store.dispatch('set_online', false)
+          this.online = false
         }
         console.log('connection closed: ' + e.code)
         setTimeout(this.createSocket.bind(this), 300)
       }
       this.socket.onerror = (e) => {
-        this.store.$store.dispatch('set_online', false)
+        this.online = false
         console.log('error')
         this.socket.onclose = function () {}
         this.socket.close()
@@ -46,7 +49,7 @@ const app = function (store) {
       }
     },
     send: function (f, forced) {
-      if (((forced !== undefined && forced === true) || this.store.$store.state.online === true) &&
+      if (((forced !== undefined && forced === true) || this.online === true) &&
         this.socket &&
         this.socket !== null &&
         this.socket !== undefined &&
@@ -66,11 +69,10 @@ const app = function (store) {
     executeServerMessage: function (obj) {
       switch (obj.f) {
         case 'auth':
+          this.online = true
           if (obj.error !== false) {
             localStorage.removeItem('token')
             this.$router.push('/')
-          } else {
-            this.store.$store.dispatch('set_online', true)
           }
           break
         case 'login':
@@ -138,6 +140,7 @@ const app = function (store) {
 export default {
   install: function (Vue) {
     Vue.mixin({
+      console.log('opa7')
       mounted () {
         if (this.$store.state.ws === null) {
           this.$store.dispatch('update_ws', app(this))
@@ -168,4 +171,3 @@ export default {
     }
   }
 }
-</script>
