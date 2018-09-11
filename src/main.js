@@ -7,14 +7,14 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import router from './router'
 import Vuex from 'vuex'
 import api from '@/lib/api'
-import feapi from '@/lib/feapi'
 
 Vue.use(Vuex)
-Vue.use(feapi)
 Vue.use(BootstrapVue)
 Vue.component('v-api', api)
 Vue.config.productionTip = false
 
+/* import feapi from '@/lib/feapi'
+Vue.use(feapi)
 const store = new Vuex.Store({
   state: {
     ws: null,
@@ -37,6 +37,10 @@ const store = new Vuex.Store({
       store.commit('online', online)
     }
   }
+}) */
+
+const store = new Vuex.Store({
+
 })
 
 /* eslint-disable no-new */
